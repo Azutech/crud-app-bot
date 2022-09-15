@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "lint": "",
+    "lint": "eslint --ext .ts . --fix",
     "dev": ""
   },
   "dependencies": {
