@@ -13,16 +13,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const dotenv_1 = __importDefault(require("dotenv"));
 mongoose_1.default.set('debug', true);
 mongoose_1.default.Promise = global.Promise;
-const uri = 'mongodb+srv://azudev:<password>@cluster0.5rbg3lj.mongodb.net/test';
-const database = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield mongoose_1.default.connect(uri, { useMongoClient: true })
-        .then(() => {
-        console.log('Connectrd to MongoDB');
-    })
-        .catch((err) => {
-        console.log(err);
-    });
+dotenv_1.default.config();
+// const uri = 'mongodb+srv://azudev:<password>@cluster0.5rbg3lj.mongodb.net/test';
+const uri = process.env.MONGODB_URI;
+const connectionParams = {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+};
+const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.connect(uri, connectionParams);
+    }
+    catch (err) {
+        console.error(err);
+    }
 });
-exports.default = database;
+mongoose_1.default.connection.once('open', () => {
+    console.log('connected to MongoDB');
+});
+exports.default = connectDB;

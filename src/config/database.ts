@@ -16,14 +16,16 @@ const connectionParams = {
 
 };
 
-const database = async () => {
-  await mongoose.connect(uri, connectionParams as ConnectionOptions)
-    .then(() => {
-      console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+const connectDB = async () => {
+  try {
+    await mongoose.connect(uri, connectionParams as ConnectionOptions);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
-export default database;
+mongoose.connection.once('open', () => {
+  console.log('connected to MongoDB');
+});
+
+export default connectDB;
